@@ -9,7 +9,7 @@ A Spring Boot (Java 21) REST API that:
 
 ## Quick Start
 
-### Running from Docker Hub (Recommended)
+### Running from Docker Hub
 
 This application is available as a Docker image on Docker Hub: `wildevp/tenpo-challenge`
 
