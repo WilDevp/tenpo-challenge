@@ -9,25 +9,33 @@ A Spring Boot (Java 21) REST API that:
 
 ## Quick Start
 
-### Using Docker Hub Image
+### Running from Docker Hub (Recommended)
+
+This application is available as a Docker image on Docker Hub: `wildevp/tenpo-challenge`
 
 ```bash
-# Pull the image from Docker Hub
+# Pull the image directly (optional)
 docker pull wildevp/tenpo-challenge
-```
 
-### Using Docker Compose (Recommended)
+# 1. Clone this repository
+git clone https://github.com/WilDevp/tenpo-challenge.git
+cd tenpo-challenge
 
-```bash
-# Start all services (PostgreSQL, Redis, and API)
-cd /path/to/project/tenpo-challenge
+# 2. Start all services (app, PostgreSQL and Redis)
 docker-compose up -d
 
-# Check logs
-docker-compose logs -f app
+# 3. Wait approximately 30 seconds for all services to initialize
+# 4. Test the API
+curl -X POST http://localhost:8080/api/v1/calculate \
+  -H "Content-Type: application/json" \
+  -d '{"num1": 10, "num2": 20}'
 ```
 
-### Local Development
+That's it! The API will be available at: http://localhost:8080/api
+
+**Note:** The docker-compose.yml is already configured to use the pre-built Docker Hub image `wildevp/tenpo-challenge`.
+
+### Alternative: Local Development
 
 ```bash
 # Start PostgreSQL
@@ -39,8 +47,6 @@ docker run -d --name tenpo-redis -p 6379:6379 redis:7
 # Run the application
 ./gradlew bootRun
 ```
-
-The API will be available at: http://localhost:8080/api
 
 ## API Usage
 
@@ -127,11 +133,6 @@ docker exec -it tenpo-challenge-db-1 psql -U postgres -d tenpo
 
 # View call history table
 docker exec -it tenpo-challenge-db-1 psql -U postgres -d tenpo -c "SELECT * FROM call_records LIMIT 10;"
-
-# Manually create database schema
-# Note: This is normally done automatically by Flyway on application startup
-docker cp src/main/resources/db/migration/V1__create_call_records_table.sql tenpo-challenge-db-1:/tmp/
-docker exec -it tenpo-challenge-db-1 psql -U postgres -d tenpo -f /tmp/V1__create_call_records_table.sql
 ```
 
 ### Using External Database Clients
@@ -143,12 +144,7 @@ Host: localhost
 Port: 5432
 Database: tenpo
 Username: postgres
-Password: postgres
-```
-
-**Example connection string:**
-```
-postgresql://postgres:postgres@localhost:5432/tenpo
+Password: password
 ```
 
 ## Redis Commands
@@ -159,47 +155,6 @@ docker exec -it tenpo-challenge-redis-1 redis-cli
 
 # Check cached percentage
 docker exec -it tenpo-challenge-redis-1 redis-cli GET "percentages::current"
-
-# Monitor Redis operations in real-time
-docker exec -it tenpo-challenge-redis-1 redis-cli MONITOR
-```
-
-### Using External Redis Clients
-
-Connect to Redis using Redis Desktop Manager or another client with these settings:
-
-```
-Host: localhost
-Port: 6379
-No authentication required
-```
-
-## Configuration
-
-Key configuration properties (in `application.yml`):
-- Cache TTL: 30 minutes
-- Default percentage fallback: 10%
-- Async task pool size: 5-10 threads
-
-## Database Migration
-
-The application uses Flyway for database migrations:
-
-```bash
-# Schema creation is handled automatically on startup, but can be run manually:
-docker exec -it tenpo-challenge-db-1 psql -U postgres -d tenpo -c "
-CREATE TABLE IF NOT EXISTS call_records (
-    id BIGSERIAL PRIMARY KEY,
-    timestamp TIMESTAMP NOT NULL,
-    endpoint VARCHAR(100) NOT NULL,
-    request_params VARCHAR(1000),
-    response VARCHAR(1000),
-    error_message VARCHAR(1000),
-    status_code INTEGER
-);
-
-CREATE INDEX idx_call_records_timestamp ON call_records (timestamp DESC);
-"
 ```
 
 ## Architecture
