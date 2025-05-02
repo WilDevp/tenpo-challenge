@@ -72,6 +72,10 @@ curl -X POST http://localhost:8080/api/v1/calculate \
 }
 ```
 
+**Example Screenshot:**
+
+![Calculate Endpoint](docs/resources/images/calculate.png)
+
 ### 2. Operation History
 
 **Endpoint:** `GET /api/v1/history?page=0&size=10`
@@ -109,6 +113,10 @@ curl -X GET "http://localhost:8080/api/v1/history?page=0&size=10"
   "totalPages": 5
 }
 ```
+
+**Example Screenshot:**
+
+![History Endpoint](docs/resources/images/history.png)
 
 ## Documentation
 
