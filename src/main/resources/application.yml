@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: tenpo-challenge
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tenpo
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+cache:
+  expiration-minutes: 30
+
+async:
+  core-pool-size: 5
+  max-pool-size: 10
+  queue-capacity: 25
+
+app:
+  calculation:
+    default-percentage: 0.10
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  api-docs:
+    path: /docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
