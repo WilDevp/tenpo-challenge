@@ -9,7 +9,14 @@ A Spring Boot (Java 21) REST API that:
 
 ## Quick Start
 
-### Docker (Recommended)
+### Using Docker Hub Image
+
+```bash
+# Pull the image from Docker Hub
+docker pull wildevp/tenpo-challenge
+```
+
+### Using Docker Compose (Recommended)
 
 ```bash
 # Start all services (PostgreSQL, Redis, and API)
@@ -19,8 +26,6 @@ docker-compose up -d
 # Check logs
 docker-compose logs -f app
 ```
-
-The API will be available at: http://localhost:8080/api
 
 ### Local Development
 
@@ -34,6 +39,8 @@ docker run -d --name tenpo-redis -p 6379:6379 redis:7
 # Run the application
 ./gradlew bootRun
 ```
+
+The API will be available at: http://localhost:8080/api
 
 ## API Usage
 
@@ -58,10 +65,6 @@ curl -X POST http://localhost:8080/api/v1/calculate \
   "result": 331.38
 }
 ```
-
-**Example Screenshot:**
-
-![Calculate Endpoint](docs/resources/images/calculate.png)
 
 ### 2. Operation History
 
@@ -100,10 +103,6 @@ curl -X GET "http://localhost:8080/api/v1/history?page=0&size=10"
   "totalPages": 5
 }
 ```
-
-**Example Screenshot:**
-
-![History Endpoint](docs/resources/images/history.png)
 
 ## Documentation
 
